@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package message;
+option go_package ="message";
+
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+
+service MessageService {
+  rpc Connect (ConnectRequest) returns (Empty);
+  rpc Disconnect (DisconnectRequest) returns (Empty);
+  rpc ReceiveMessage (ReceiveMessageRequest) returns (stream ReceiveMessageResponse);
+  rpc SendMessageOthers (SendMessageRequest) returns (Empty);
+  rpc SendMessageAll (SendMessageRequest) returns (Empty);
+}
+
+message Empty {
+}
+
+message ConnectRequest {
+  string id = 1 [(validator.field) = {msg_exists : true}];
+  string name = 2 [(validator.field) = {msg_exists : true}];
+  int64 x = 3;
+  int64 y = 4; 
+}
+
+message DisconnectRequest {
+  string id = 1 [(validator.field) = {msg_exists : true}];
+}
+
+message ReceiveMessageRequest {
+  string from_id = 1 [(validator.field) = {msg_exists : true}];
+}
+
+message ReceiveMessageResponse {
+  string from_id = 1 [(validator.field) = {msg_exists : true}];
+  string type = 2 [(validator.field) = {msg_exists : true}];
+  repeated string params = 3;
+}
+
+message SendMessageRequest {
+  string from_id = 1 [(validator.field) = {msg_exists : true}];
+  string type = 2 [(validator.field) = {msg_exists : true}];
+  repeated string params = 3;
+}
+
