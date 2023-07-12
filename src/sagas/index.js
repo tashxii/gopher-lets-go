@@ -1,7 +1,7 @@
 import { fork, take, call, put } from "redux-saga/effects"
 import { eventChannel } from "redux-saga"
 import MessageApi from "../libs/api/messageApi"
-import Gopher from "../libs/model/Gopher"
+import Gopher from "../libs/model/gopher"
 import {
   CONNECT_START_EVENT,
   CONNECT_SUCCESS_EVENT,
@@ -39,7 +39,7 @@ function* handleConnect() {
       action.payload.name,
     )
     if (error) {
-      console.log(error)
+      console.error(error)
       yield put(connectFailureEvent())
     } else {
       yield put(connectSuccessEvent(action.payload.id, action.payload.name, "/main"))
@@ -56,7 +56,7 @@ function* handleDisconnect() {
       action.payload.id,
     )
     if (error) {
-      console.log(error)
+      console.error(error)
       yield put(disconnectFailureEvent())
     } else {
       yield put(disconnectSuccessEvent())
@@ -75,7 +75,7 @@ function* handleSendMessageOthers() {
       action.payload.params,
     )
     if (error) {
-      console.log(error)
+      console.error(error)
       yield put(sendMessageOthersFailureEvent())
     } else {
       yield put(sendMessageOthersSuccessEvent())
@@ -94,7 +94,7 @@ function* handleSendMessageAll() {
       action.payload.params,
     )
     if (error) {
-      console.log(error)
+      console.error(error)
       yield put(sendMessageAllFailureEvent())
     } else {
       yield put(sendMessageAllSuccessEvent())
@@ -126,7 +126,7 @@ function createReceiveMessageEventChannel(prms) {
           break
         case "dead":
           //"dead %s %s %t", player.id, bullet.id, bullet.special
-          emit(deadPlayerEvent(... res.params))
+          emit(deadPlayerEvent(...res.params))
           break
         default:
           console.log("no matching message type " + res.type)
@@ -164,18 +164,18 @@ function* watchRefresh() {
 function createRefreshChannel(id) {
   return eventChannel(emit => {
     const iv = setInterval(() => {
-      emit(sendMessageAllStartEvent(id,"refresh",[]))
+      emit(sendMessageAllStartEvent(id, "refresh", []))
     }, 1)
     return () => {
       clearInterval(iv)
-    }    
+    }
   })
 }
 
 function* handleMousemove() {
   while (true) {
     const action = yield take(SHOW_PLAYER_EVENT)
-    const {id, x, y, charge} = action.payload
+    const { id, x, y, charge } = action.payload
     yield put(sendMessageOthersStartEvent(id, "show", [x, y, charge]))
   }
 }
@@ -183,7 +183,7 @@ function* handleMousemove() {
 function* handleFireBomb() {
   while (true) {
     const action = yield take(FIRE_BOMB_EVENT)
-    const {id, x, y, direction} = action.payload
+    const { id, x, y, direction } = action.payload
     console.log("fire bomb ... ")
     console.log(action)
     yield put(sendMessageOthersStartEvent(id, "fire-bomb", [x, y, direction]))
@@ -193,7 +193,7 @@ function* handleFireBomb() {
 function* handleFireMissile() {
   while (true) {
     const action = yield take(FIRE_MISSILE_EVENT)
-    const {id, x, y, direction} = action.payload
+    const { id, x, y, direction } = action.payload
     console.log("fire bomb ... ")
     console.log(action)
     yield put(sendMessageOthersStartEvent(id, "fire-missile", [x, y, direction]))

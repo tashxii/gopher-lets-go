@@ -3,24 +3,31 @@ import MessageGrpcClient from "./messageGrpcClient"
 
 class MessageApi {
   static connectAsync = async (id, name) => {
-    const client = MessageGrpcClient.get()
-    return client.Connect().sendMessage({
-      id: id,
-      name: name,
-      x: 250,
-      y: 200,
+    const client = MessageGrpcClient.getRaw()
+    const prom = new Promise((resolve, reject) => {
+      client.Connect({
+        id: id,
+        name: name,
+        x: 250,
+        y: 200,
+      }, (err, response) => {
+        console.warn("here", err, response)
+        err === null ? resolve(response) : reject(err);
+      })
     })
-    .then(() => ({}))
-    .catch(error => ({ error }))
+    return await prom
   }
 
   static disconnectAsync = async (id) => {
-    const client = MessageGrpcClient.get()
-    return client.Disconnect().sendMessage({
-      "id": id
+    const client = MessageGrpcClient.getRaw()
+    const prom = new Promise((resolve, reject) => {
+      client.Disconnect({ id }, (err, response) => {
+        err === null ? resolve(response) : reject(err);
+      })
     })
-    .then(() => ({}))
-    .catch(error => ({ error }))    
+      .then(() => ({}))
+      .catch(error => ({ error }))
+    return await prom
   }
 
   static receiveMessage = (id) => {
@@ -31,25 +38,35 @@ class MessageApi {
   }
 
   static sendMessageOthersAsync = async (id, type, params) => {
-    const client = MessageGrpcClient.get()
-    return client.SendMessageOthers().sendMessage({
-      from_id: id,
-      type: type,
-      params: params,
+    const client = MessageGrpcClient.getRaw()
+    const prom = new Promise((resolve, reject) => {
+      client.SendMessageOthers({
+        from_id: id,
+        type: type,
+        params: params,
+      }, (err, response) => {
+        err === null ? resolve(response) : reject(err);
+      })
     })
-    .then(() => ({}))
-    .catch(error => ({ error }))
+      .then(() => ({}))
+      .catch(error => ({ error }))
+    return await prom
   }
 
   static sendMessageAllAsync = async (id, type, params) => {
-    const client = MessageGrpcClient.get()
-    return client.SendMessageAll().sendMessage({
-      from_id: id,
-      type: type,
-      params: params,
+    const client = MessageGrpcClient.getRaw()
+    const prom = new Promise((resolve, reject) => {
+      client.SendMessageAll({
+        from_id: id,
+        type: type,
+        params: params,
+      }, (err, response) => {
+        err === null ? resolve(response) : reject(err);
+      })
     })
-    .then(() => ({}))
-    .catch(error => ({ error }))
+      .then(() => ({}))
+      .catch(error => ({ error }))
+    return await prom
   }
 }
 

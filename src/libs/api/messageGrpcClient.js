@@ -22,7 +22,7 @@ let grpc
 let grpc_promise
 let protoLoader
 let isInit = false
-let client 
+let client
 let rawClient
 
 class MessageGrpcClient {
@@ -66,13 +66,14 @@ class MessageGrpcClient {
   }
 
   static init = () => {
-    if(isInit === false ){
+    if (isInit === false) {
       const protoDescriptor = MessageGrpcClient.loadDescriptor("message.proto")
       const message_proto = protoDescriptor.message
       const url = "localhost:10000"
       client = new message_proto.MessageService(url, grpc.credentials.createInsecure())
-      grpc_promise.promisifyAll(client)
-      rawClient = new message_proto.MessageService(url, grpc.credentials.createInsecure())
+      //grpc_promise.promisifyAll(client)
+      console.warn(grpc.credentials.createInsecure())
+      rawClient = new message_proto.MessageService(url, grpc.credentials.createInsecure(), { 'grpc.enable_http_proxy': 0 })
       isInit = true
     }
   }

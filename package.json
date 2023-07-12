@@ -5,8 +5,8 @@
   "homepage": ".",
   "main": "./src/main.js",
   "dependencies": {
+    "@grpc/grpc-js": "^1.8.17",
     "@grpc/proto-loader": "^0.3.0",
-    "grpc": "1.15.1",
     "grpc-promise": "^1.4.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",

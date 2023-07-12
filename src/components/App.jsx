@@ -1,5 +1,5 @@
 import React from "react"
-import {BrowserRouter, Route, Redirect} from "react-router-dom"
+import { BrowserRouter, Route, Redirect } from "react-router-dom"
 import EntryContainer from "../containers/EntryContainer"
 import MainContainer from "../containers/MainContainer"
 import ImageLoader from "../libs/util/imageLoader"
@@ -10,7 +10,7 @@ const remote = electron.remote
 const info = remote.getGlobal('info')
 ImageLoader.setImages(info.images)
 
-const grpc = window.require("grpc")
+const grpc = window.require("@grpc/grpc-js")
 const protoLoader = window.require("@grpc/proto-loader")
 const grpc_promise = window.require("grpc-promise")
 MessageGrpcClient.setRequired(grpc, grpc_promise, protoLoader)

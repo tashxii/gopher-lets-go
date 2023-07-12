@@ -1,5 +1,5 @@
 //main.js
-const {app, BrowserWindow, ipcMain} = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
@@ -11,14 +11,15 @@ const info = {
 global.info = info
 
 let win
-function createWindow () {
-  win = new BrowserWindow({width: 800, height: 600, resizable:true})
+function createWindow() {
+  win = new BrowserWindow({ width: 800, height: 600, resizable: true })
   info.win = win
-  
+  win.webContents.openDevTools()
+
   const files = fs.readdirSync(path.join(__dirname, '/../build/images'))
-  files.forEach((file)=>{
+  files.forEach((file) => {
     const ext = path.extname(file)
-    if(ext === '.png' || ext === '.jpg') {
+    if (ext === '.png' || ext === '.jpg') {
       const binary = fs.readFileSync(path.join(__dirname, '/../build/images/' + file))
       const base64data = Buffer.from(binary).toString('base64')
       info.images[file] = {
